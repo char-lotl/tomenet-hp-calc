@@ -1,0 +1,30 @@
+* {
+	font-family: 'Trebuchet MS';
+	/*text-align: center;*/
+}
+
+#all-inputs {
+	margin-top: 15%;
+}
+
+#all-inputs > div {
+  text-align: center;
+  margin: 1em;
+}
+
+.output {
+	font-size: 3em;
+}
+
+input {
+	width: 3em;
+}
+
+input[invalid] {
+	background-color: #FFCCCC;
+}
+
+#banned-race-class[hidden] {
+	visibility: hidden;
+}
+
