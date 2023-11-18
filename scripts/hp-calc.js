@@ -4,6 +4,7 @@ const hitpointsOutput = document.querySelector('#hitpoints-output');
 const mimicHitpointsOutput = document.querySelector('#mimic-hitpoints-output');
 const bannedRaceClassComboWarning = document.querySelector('#banned-race-class');
 const mpCalcLink = document.querySelector('#mp-calc-link');
+const mimicrySection = document.querySelector('#mimicry-section');
 
 const profile = {
   playerRace: "human",
@@ -142,6 +143,7 @@ const classBans = {
   "corrupted-maia": ["warrior", "archer", "death-knight"]
 };
 
+const classMimics = ["mimic", "druid", "shaman", "adventurer", "hell-knight"];
 
 const monsterdex = [
   [1, "Filthy street urchin", "t", 1, 4, 0],
@@ -1050,6 +1052,13 @@ const updateOutput = function() {
     bannedRaceClassComboWarning.removeAttribute("hidden");
   } else {
     bannedRaceClassComboWarning.setAttribute("hidden", "");
+  }
+
+  const canMimic = classMimics.includes(profile.playerClass) || (profile.playerRace === "corrupted-maia" && profile.playerClass === "priest");
+  if (canMimic) {
+    mimicrySection.removeAttribute("hidden");
+  } else {
+    mimicrySection.setAttribute("hidden", "");
   }
 
 };

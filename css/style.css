@@ -7,7 +7,7 @@
 	margin-top: 5em;
 }
 
-#all-inputs > div {
+#all-inputs div {
   text-align: center;
   margin: 1em;
 }
@@ -24,8 +24,8 @@ input[invalid] {
 	background-color: #FFCCCC;
 }
 
-#banned-race-class[hidden] {
-	visibility: hidden;
+div[hidden] {
+	display: none;
 }
 
 #mp-calc-link {
