@@ -28,3 +28,14 @@ input[invalid] {
 	visibility: hidden;
 }
 
+#mp-calc-link {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	padding: 1em;
+	background-color: #CCF;
+	border-radius: 0.5em;
+	margin: 0.5em;
+	user-select: none;
+}
+

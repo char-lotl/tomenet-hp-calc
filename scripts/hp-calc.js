@@ -3,6 +3,7 @@ const allInputs = document.querySelector('#all-inputs');
 const hitpointsOutput = document.querySelector('#hitpoints-output');
 const mimicHitpointsOutput = document.querySelector('#mimic-hitpoints-output');
 const bannedRaceClassComboWarning = document.querySelector('#banned-race-class');
+const mpCalcLink = document.querySelector('#mp-calc-link');
 
 const profile = {
   playerRace: "human",
@@ -1086,4 +1087,8 @@ allInputs.addEventListener('input', e => {
     }
   }
   updateOutput();
+});
+
+mpCalcLink.addEventListener('click', e => {
+  window.location = '../tomenet-mp-calc/index.html';
 });
