@@ -115,7 +115,7 @@ const derivativeProperties = {
 
 const patternSelector = {
   "playerLevel": /^[1-9][0-9]?$/,
-  "healthSkill": /^([1-4]?\d(.\d\d?\d?)?|50(.00?0?)?)$/,
+  "healthSkill": /^([1-4]?\d(\.\d\d?\d?)?|50(.00?0?)?)$/,
   "mimicHitDice": /^(400|[1-3][0-9][0-9]|[1-9][0-9]?)$/,
   "mimicHitDieSize": /^(300|[1-2][0-9][0-9]|[1-9][0-9]?)$/,
   "mimicRlvl": /^(9[0-8]?|[1-8][0-9]?|0)$/
