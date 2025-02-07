@@ -1,5 +1,6 @@
 * {
 	font-family: 'Trebuchet MS';
+	cursor: default;
 	/*text-align: center;*/
 }
 
@@ -18,6 +19,7 @@
 
 input {
 	width: 3em;
+	cursor: auto;
 }
 
 input[invalid] {
@@ -37,6 +39,8 @@ div[hidden] {
 	border-radius: 0.5em;
 	margin: 0.5em;
 	user-select: none;
+	text-decoration: none;
+	color: #000;
 }
 
 h1 {

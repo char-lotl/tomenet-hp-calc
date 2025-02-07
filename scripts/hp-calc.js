@@ -1097,7 +1097,3 @@ allInputs.addEventListener('input', e => {
   }
   updateOutput();
 });
-
-mpCalcLink.addEventListener('click', e => {
-  window.location = '../tomenet-mp-calc/index.html';
-});
