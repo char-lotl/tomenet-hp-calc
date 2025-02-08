@@ -30,17 +30,31 @@ div[hidden] {
 	display: none;
 }
 
-#mp-calc-link {
+#calc-link-sidebar {
 	position: absolute;
 	top: 0px;
 	left: 0px;
-	padding: 1em;
-	background-color: #CCF;
-	border-radius: 0.5em;
-	margin: 0.5em;
 	user-select: none;
+}
+
+#calc-link-sidebar a {
 	text-decoration: none;
 	color: #000;
+}
+
+#calc-link-sidebar div {
+	padding: 1em;
+	border-radius: 0.5em;
+	margin: 0.5em;
+	text-align: center;
+}
+
+#mp-calc-link div {
+	background-color: #CCF;
+}
+
+#failrate-calc-link div {
+	background-color: #BBF;
 }
 
 h1 {
