@@ -2,9 +2,6 @@ const allInputs = document.querySelector('#all-inputs');
 
 const hitpointsOutput = document.querySelector('#hitpoints-output');
 const mimicHitpointsOutput = document.querySelector('#mimic-hitpoints-output');
-const bannedRaceClassComboWarning = document.querySelector('#banned-race-class');
-const mpCalcLink = document.querySelector('#mp-calc-link');
-const mimicrySection = document.querySelector('#mimicry-section');
 
 const profile = {
   playerRace: "human",
@@ -15,6 +12,7 @@ const profile = {
   conHealthBonus: 0,
   playerLevel: 1,
   healthSkill: 0,
+  natureSkill: 0,
   mimicHitDice: 1,
   mimicHitDieSize: 1,
   mimicRlvl: 1
@@ -116,34 +114,11 @@ const derivativeProperties = {
 const patternSelector = {
   "playerLevel": /^[1-9][0-9]?$/,
   "healthSkill": /^([1-4]?\d(\.\d\d?\d?)?|50(.00?0?)?)$/,
+  "natureSkill": /^([1-4]?\d(\.\d\d?\d?)?|50(.00?0?)?)$/,
   "mimicHitDice": /^(400|[1-3][0-9][0-9]|[1-9][0-9]?)$/,
   "mimicHitDieSize": /^(300|[1-2][0-9][0-9]|[1-9][0-9]?)$/,
   "mimicRlvl": /^(9[0-8]?|[1-8][0-9]?|0)$/
 };
-
-const classBans = {
-  "human": ["death-knight", "hell-knight"],
-  "half-elf": ["death-knight", "hell-knight"],
-  "elf": ["death-knight", "hell-knight"],
-  "hobbit": ["death-knight", "hell-knight"],
-  "gnome": ["death-knight", "hell-knight"],
-  "dwarf": ["death-knight", "hell-knight"],
-  "half-orc": ["death-knight", "hell-knight"],
-  "half-troll": ["death-knight", "hell-knight"],
-  "dunadan": ["death-knight", "hell-knight"],
-  "high-elf": ["death-knight", "hell-knight"],
-  "yeek": ["death-knight", "hell-knight"],
-  "goblin": ["death-knight", "hell-knight"],
-  "ent": ["rogue", "archer", "death-knight", "hell-knight"],
-  "draconian": ["death-knight", "hell-knight"],
-  "kobold": ["death-knight", "hell-knight"],
-  "dark-elf": ["paladin", "death-knight", "hell-knight"],
-  "vampire": ["priest", "mimic", "paladin", "druid", "shaman", "hell-knight"],
-  "enlightened-maia": ["warrior", "archer", "death-knight", "hell-knight"],
-  "corrupted-maia": ["warrior", "archer", "death-knight"]
-};
-
-const classMimics = ["mimic", "druid", "shaman", "adventurer", "hell-knight"];
 
 const monsterdex = [
   [1, "Filthy street urchin", "t", 1, 4, 0],
@@ -992,6 +967,56 @@ const getPlayerHPEff = function(level, dieSize) {
   }
 }
 
+const natureClasses = ["istar", "ranger", "adventurer", "druid", "shaman"];
+
+const shouldApplyNature = function(p) {
+  return (natureClasses.includes(p.playerClass) && (p.playerRace != "vampire"));
+}
+
+const applyNatureBonus = function(p, mhp) {
+  let remainingBonus = Math.floor(p.natureSkill);
+  if (!remainingBonus) return mhp;
+
+  const effLevel = (p.playerLevel > 50 ) ? 50 : p.playerLevel;
+  const threshold = Math.floor((effLevel + 10) * (effLevel + 10) * (effLevel + 10) / 270);
+  const increment = effLevel * 2;
+
+  let beforeThreshold = threshold - mhp;
+  if (beforeThreshold >= 4) {
+    const bonusUntilThreshold = Math.floor(beforeThreshold / 4);
+    const bonusToSpend = bonusUntilThreshold > remainingBonus ? remainingBonus : bonusUntilThreshold;
+    mhp += bonusToSpend * 4;
+    remainingBonus -= bonusToSpend;
+  }
+  if (!remainingBonus) return mhp;
+
+  beforeThreshold = threshold + increment - mhp;
+  if (beforeThreshold >= 3) {
+    const bonusUntilThreshold = Math.floor(beforeThreshold / 3);
+    const bonusToSpend = bonusUntilThreshold > remainingBonus ? remainingBonus : bonusUntilThreshold;
+    mhp += bonusToSpend * 3;
+    remainingBonus -= bonusToSpend;
+  }
+  if (!remainingBonus) return mhp;
+
+  beforeThreshold = threshold + 2 * increment - mhp;
+  if (beforeThreshold >= 2) {
+    const bonusUntilThreshold = Math.floor(beforeThreshold / 2);
+    const bonusToSpend = bonusUntilThreshold > remainingBonus ? remainingBonus : bonusUntilThreshold;
+    mhp += bonusToSpend * 2;
+    remainingBonus -= bonusToSpend;
+  }
+  if (!remainingBonus) return mhp;
+
+  beforeThreshold = threshold + 3 * increment - mhp;
+  if (beforeThreshold > 0) {
+    const bonusToSpend = beforeThreshold > remainingBonus ? remainingBonus : beforeThreshold;
+    mhp += bonusToSpend;
+  }
+  return mhp;
+
+};
+
 const recompute = function(p) {
 
   const level = p.playerLevel;
@@ -1029,7 +1054,13 @@ const recompute = function(p) {
   const postKingMimicBonus = Math.floor(((level - 50) * ((monsterRlvl > 80 ? 80 : monsterRlvl) + 30)) / 25);
   const effectiveMimicBonus = (level > 50) ? postKingMimicBonus : 0;
 
-  return [playerFormHP + corruptedBonus, finalHP + effectiveMimicBonus + corruptedBonus];
+  const nonMimicHPAfterBonuses = playerFormHP + corruptedBonus;
+  const mimicHPAfterBonuses = finalHP + effectiveMimicBonus + corruptedBonus;
+
+  const nonMimicAfterNature = shouldApplyNature(p) ? applyNatureBonus(p, nonMimicHPAfterBonuses) : nonMimicHPAfterBonuses;
+  const mimicAfterNature = shouldApplyNature(p) ? applyNatureBonus(p, mimicHPAfterBonuses) : mimicHPAfterBonuses;
+
+  return [nonMimicAfterNature, mimicAfterNature];
 
 };
 
@@ -1047,20 +1078,6 @@ const updateOutput = function() {
   displayValueIn(playerHitpoints, hitpointsOutput);
   displayValueIn(mimicryHitpoints, mimicHitpointsOutput);
 
-  const banned = classBans[profile.playerRace].includes(profile.playerClass);
-  if (banned) {
-    bannedRaceClassComboWarning.removeAttribute("hidden");
-  } else {
-    bannedRaceClassComboWarning.setAttribute("hidden", "");
-  }
-
-  const canMimic = classMimics.includes(profile.playerClass) || (profile.playerRace === "corrupted-maia" && profile.playerClass === "priest");
-  if (canMimic) {
-    mimicrySection.removeAttribute("hidden");
-  } else {
-    mimicrySection.setAttribute("hidden", "");
-  }
-
 };
 
 updateOutput();
@@ -1073,6 +1090,12 @@ allInputs.addEventListener('change', e => {
     profile[changedFieldID] = changedFieldValue;
     const derivativeProperty = derivativeProperties[changedFieldID];
     profile[derivativeProperty] = parseSelector[derivativeProperty][changedFieldValue];
+    if (changedFieldID === 'playerRace') {
+      allInputs.setAttribute("displayingrace", changedFieldValue);
+    }
+    if (changedFieldID === 'playerClass') {
+      allInputs.setAttribute("displayingclass", changedFieldValue);
+    }
   } else if (changedFieldType === 'checkbox') {
     profile[changedFieldID] = e.target.checked;
   } else if (changedFieldType === 'number') {

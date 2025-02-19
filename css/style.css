@@ -30,6 +30,134 @@ div[hidden] {
 	display: none;
 }
 
+#nature-skill-section {
+	display: none;
+}
+
+#all-inputs[displayingclass="istar"] #nature-skill-section {
+	display: inherit;
+}
+
+#all-inputs[displayingclass="ranger"] #nature-skill-section {
+	display: inherit;
+}
+
+#all-inputs[displayingclass="adventurer"] #nature-skill-section {
+	display: inherit;
+}
+
+#all-inputs[displayingclass="druid"] #nature-skill-section {
+	display: inherit;
+}
+
+#all-inputs[displayingclass="shaman"] #nature-skill-section {
+	display: inherit;
+}
+
+#all-inputs[displayingrace="vampire"] #nature-skill-section {
+	display: none;
+}
+
+#mimicry-section {
+	display: none;
+}
+
+#all-inputs[displayingclass="mimic"] #mimicry-section {
+	display: inherit;
+}
+
+#all-inputs[displayingclass="druid"] #mimicry-section {
+	display: inherit;
+}
+
+#all-inputs[displayingclass="shaman"] #mimicry-section {
+	display: inherit;
+}
+
+#all-inputs[displayingclass="adventurer"] #mimicry-section {
+	display: inherit;
+}
+
+#all-inputs[displayingclass="hell-knight"] #mimicry-section {
+	display: inherit;
+}
+
+#all-inputs[displayingclass="priest"][displayingclass="corrupted-maia"] #mimicry-section {
+	display: inherit;
+}
+
+#banned-race-class {
+	display: none;
+}
+
+#all-inputs[displayingclass="death-knight"] #banned-race-class {
+	display: inherit;
+}
+
+#all-inputs[displayingclass="death-knight"][displayingrace="vampire"] #banned-race-class {
+	display: none;
+}
+
+#all-inputs[displayingclass="hell-knight"] #banned-race-class {
+	display: inherit;
+}
+
+#all-inputs[displayingclass="hell-knight"][displayingrace="corrupted-maia"] #banned-race-class {
+	display: none;
+}
+
+#all-inputs[displayingclass="rogue"][displayingrace="ent"] #banned-race-class {
+	display: inherit;
+}
+
+#all-inputs[displayingclass="archer"][displayingrace="ent"] #banned-race-class {
+	display: inherit;
+}
+
+#all-inputs[displayingclass="paladin"][displayingrace="dark-elf"] #banned-race-class {
+	display: inherit;
+}
+
+#all-inputs[displayingclass="priest"][displayingrace="vampire"] #banned-race-class {
+	display: inherit;
+}
+
+#all-inputs[displayingclass="mimic"][displayingrace="vampire"] #banned-race-class {
+	display: inherit;
+}
+
+#all-inputs[displayingclass="paladin"][displayingrace="vampire"] #banned-race-class {
+	display: inherit;
+}
+
+#all-inputs[displayingclass="druid"][displayingrace="vampire"] #banned-race-class {
+	display: inherit;
+}
+
+#all-inputs[displayingclass="shaman"][displayingrace="vampire"] #banned-race-class {
+	display: inherit;
+}
+
+#all-inputs[displayingclass="warrior"][displayingrace="enlightened-maia"] #banned-race-class {
+	display: inherit;
+}
+
+#all-inputs[displayingclass="archer"][displayingrace="enlightened-maia"] #banned-race-class {
+	display: inherit;
+}
+
+#all-inputs[displayingclass="warrior"][displayingrace="corrupted-maia"] #banned-race-class {
+	display: inherit;
+}
+
+#all-inputs[displayingclass="archer"][displayingrace="corrupted-maia"] #banned-race-class {
+	display: inherit;
+}
+
+#all-inputs[displayingclass="paladin"][displayingrace="corrupted-maia"] #banned-race-class {
+	display: inherit;
+}
+
 #calc-link-sidebar {
 	position: absolute;
 	top: 0px;
