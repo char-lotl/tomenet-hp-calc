@@ -1,8 +1,10 @@
+// Assigning names to DOM objects corresponding to key page elements.
 const allInputs = document.querySelector('#all-inputs');
 
 const hitpointsOutput = document.querySelector('#hitpoints-output');
 const mimicHitpointsOutput = document.querySelector('#mimic-hitpoints-output');
 
+// Default character profile values.
 const profile = {
   playerRace: "human",
   racialHitDie: 10,
@@ -18,6 +20,7 @@ const profile = {
   mimicRlvl: 1
 };
 
+// Pairs character ancestries with hit dice.
 const raceParser = {
   "human": 10,
   "half-elf": 10,
@@ -40,6 +43,7 @@ const raceParser = {
   "corrupted-maia": 11
 };
 
+// Pairs character classes with hit die modifiers.
 const classParser = {
   "warrior": 10,
   "istar": 0,
@@ -58,6 +62,7 @@ const classParser = {
   "hell-knight": 8
 };
 
+// Pairs constitution scores with their associated HP adjustment score.
 const constitutionParser = {
   "three": -5,
   "four": -4,
@@ -99,27 +104,34 @@ const constitutionParser = {
   "eighteen-two-hundred-twenty": 25
 };
 
+// Pairs selector element names with the objects that parse their selections into meaningful values.
 const parseSelector = {
   "racialHitDie": raceParser,
   "classDieBonus": classParser,
   "conHealthBonus": constitutionParser
 };
 
+// Associates dependent properties with the directly modifiable character property they depend on.
 const derivativeProperties = {
   "playerRace": "racialHitDie",
   "playerClass": "classDieBonus",
   "conScore": "conHealthBonus"
 }
 
+// Associates entry fields with their corresponding validation regexes.
 const patternSelector = {
-  "playerLevel": /^[1-9][0-9]?$/,
-  "healthSkill": /^([1-4]?\d(\.\d\d?\d?)?|50(.00?0?)?)$/,
-  "natureSkill": /^([1-4]?\d(\.\d\d?\d?)?|50(.00?0?)?)$/,
-  "mimicHitDice": /^(400|[1-3][0-9][0-9]|[1-9][0-9]?)$/,
-  "mimicHitDieSize": /^(300|[1-2][0-9][0-9]|[1-9][0-9]?)$/,
-  "mimicRlvl": /^(9[0-8]?|[1-8][0-9]?|0)$/
+  "playerLevel": /^[1-9][0-9]?$/,                             // 1 to 99
+  "healthSkill": /^([1-4]?\d(\.\d\d?\d?)?|50(.00?0?)?)$/,     // 0.000 to 50.000, decimals optional
+  "natureSkill": /^([1-4]?\d(\.\d\d?\d?)?|50(.00?0?)?)$/,     // ditto
+  "mimicHitDice": /^(400|[1-3][0-9][0-9]|[1-9][0-9]?)$/,      // 1 to 400
+  "mimicHitDieSize": /^(300|[1-2][0-9][0-9]|[1-9][0-9]?)$/,   // 1 to 300
+  "mimicRlvl": /^(9[0-8]?|[1-8][0-9]?|0)$/                    // 1 to 98
 };
 
+// Array of all monsters in TomeNET that are valid shapeshifting targets,
+// together with a relevant fragment of their data.
+// Format: index, name, char, hit dice, hit die size, monster level.
+// TODO: Make mimicry forms inputtable by name.
 const monsterdex = [
   [1, "Filthy street urchin", "t", 1, 4, 0],
   [2, "Scrawny cat", "f", 1, 2, 0],
@@ -942,10 +954,12 @@ const monsterdex = [
   [1143, "Nether vortex", "v", 40, 20, 97]
 ];
 
+// Die roll expected value calculator.
 const averageRoll = function(levels, dieSize) {
   return Math.floor((dieSize + 1) * (levels - 1) / 2) + dieSize;
 }
 
+// Computes an internal game value relevant to HP computation.
 const getPlayerHPEff = function(level, dieSize) {
   const averageRollWithDie = level => averageRoll(level, dieSize);
   if (level <= 50) {
@@ -967,12 +981,32 @@ const getPlayerHPEff = function(level, dieSize) {
   }
 }
 
-const natureClasses = ["istar", "ranger", "adventurer", "druid", "shaman"];
-
-const shouldApplyNature = function(p) {
-  return (natureClasses.includes(p.playerClass) && (p.playerRace != "vampire"));
+// Indicates the classes which have access to Nature magic.
+const classHasNature = {
+  "warrior": false,
+  "istar": true,         //
+  "priest": false,
+  "rogue": false,
+  "mimic": false,
+  "archer": false,
+  "paladin": false,
+  "ranger": true,        //
+  "adventurer": true,    //
+  "druid": true,         //
+  "shaman": true,        //
+  "runemaster": false,
+  "mindcrafter": false,
+  "death-knight": false,
+  "hell-knight": false
 }
 
+// Determines whether a given player character can use Nature magic.
+const shouldApplyNature = function(p) {
+  return (classHasNature[p.playerClass] && (p.playerRace != "vampire"));
+}
+
+// Computes the "Nature HP Supplement", a feature designed to boost the HP of
+// classes with low durability.
 const applyNatureBonus = function(p, mhp) {
   let remainingBonus = Math.floor(p.natureSkill);
   if (!remainingBonus) return mhp;
@@ -1017,6 +1051,8 @@ const applyNatureBonus = function(p, mhp) {
 
 };
 
+// The full HP computation, following closely the original C code,
+// though in more of a functional style.
 const recompute = function(p) {
 
   const level = p.playerLevel;
@@ -1072,6 +1108,7 @@ const clearDisplay = function(container) {
   container.textContent = "";
 }
 
+// Wiring up the outputs.
 const updateOutput = function() {
   
   const [playerHitpoints, mimicryHitpoints] = recompute(profile);
@@ -1082,6 +1119,7 @@ const updateOutput = function() {
 
 updateOutput();
 
+// Wiring up the inputs.
 allInputs.addEventListener('change', e => {
   const changedFieldID = e.target.id;
   const changedFieldType = e.target.type;
